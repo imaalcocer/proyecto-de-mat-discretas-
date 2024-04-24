@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conjuntos de Bruijn Binarios</title>
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h2 class="mt-4">Generador de Conjuntos de Bruijn Binarios</h2>
+    <div class="form-group">
+        <label for="numCombinaciones">Número:</label>
+        <input type="number" id="numCombinaciones" class="form-control" onkeydown="if(event.keyCode===13) generarCombinaciones()">
+    </div>
+    <button class="btn btn-primary" onclick="generarCombinaciones()">Generar</button>
+    <div id="tiempo" class="mt-3"></div>
+    <div id="totalCombinaciones" class="mt-3"></div>
+    <div id="combinaciones" class="mt-3"></div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+function generarCombinaciones() {
+  var startTime = performance.now();
+  var numCombinaciones = parseInt(document.getElementById('numCombinaciones').value);
+  
+  if (!isNaN(numCombinaciones)) {
+    var conjunto = [];
+    for (var i = 0; i < Math.pow(2, numCombinaciones); i++) {
+      var secuencia = i.toString(2).padStart(numCombinaciones, '0');
+      conjunto.push(secuencia);
+    }
+    
+    mostrarCombinaciones(conjunto);
+    mostrarTotalCombinaciones(conjunto.length);
+    var endTime = performance.now();
+    mostrarTiempo(endTime - startTime);
+  } else {
+    alert("Por favor ingresa un número válido.");
+  }
+}
+
+function mostrarCombinaciones(conjunto) {
+  var combinacionesDiv = document.getElementById('combinaciones');
+  combinacionesDiv.innerHTML = '';
+
+  // Crear tabla
+  var table = document.createElement('table');
+  table.classList.add('table', 'table-bordered', 'table-striped', 'text-center');
+  var tbody = document.createElement('tbody');
+
+  // Crear filas y celdas para cada combinación
+  conjunto.forEach(function(combinacion, index) {
+    var row = document.createElement('tr');
+    var cellIndex = document.createElement('td');
+    var cellCombination = document.createElement('td');
+    
+    cellIndex.textContent = index + 1; // Sumar 1 para enumerar desde 1 en lugar de 0
+    cellCombination.textContent = combinacion;
+
+    row.appendChild(cellIndex);
+    row.appendChild(cellCombination);
+    tbody.appendChild(row);
+  });
+
+  table.appendChild(tbody);
+  combinacionesDiv.appendChild(table);
+}
+
+function mostrarTiempo(tiempo) {
+  var tiempoDiv = document.getElementById('tiempo');
+  tiempoDiv.textContent = 'Tiempo de generación: ' + tiempo.toFixed(2) + ' milisegundos';
+}
+
+function mostrarTotalCombinaciones(total) {
+  var totalDiv = document.getElementById('totalCombinaciones');
+  totalDiv.textContent = 'Total de combinaciones generadas: ' + total;
+}
+</script>
+</body>
+</html>
